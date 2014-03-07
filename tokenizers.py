@@ -22,12 +22,12 @@ class BaseChineseWordTokenizer(object):
 
     def __iter__(self):
         # 之类需要实现如何从行文本中提取token, 使用list, 或者 generator
-        raise NotImplementedError
+        raise NotImplementedError('Please use subclass of BaseChineseWordTokenizer, and Implemented __iter__() method.')
 
     def __call__(self):
         print 'you call me'
 
-    def process_tokens(self, text, tokens):
+    def process_tokens(self, text, tokens=[]):
         #for i,token in enumerate(tokens):
         #    print i,token
         # 如果传入了tokens, 即传入了有其他分词器处理后返回的tokens,
