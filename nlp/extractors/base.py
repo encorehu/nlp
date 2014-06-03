@@ -1,6 +1,15 @@
 import re
 
 class BaseExtractor(object):
+
+    def _extract(self, html):
+        result =[]
+        return result
+
+    def extract(self, html):
+        return self._extract(html)
+
+class BaseRegexExtractor(object):
     regex = None
 
     def _extract(self, html, regex=None):
