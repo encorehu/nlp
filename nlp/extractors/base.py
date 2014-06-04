@@ -11,7 +11,7 @@ class BaseExtractor(object):
             raise Exception('s1 is None!')
 
         pos1 = text.find(s1)
-        if s2 and pos != -1:
+        if s2 and pos1 != -1:
             pos2 = text.find(s2, pos1)
         else:
             pos2 = -1
