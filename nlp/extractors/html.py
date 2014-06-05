@@ -56,7 +56,7 @@ class MarkdownExtractor(BaseExtractor):
 
 
         # 一个一个字符开始探测, 可以称之为流式探测, string flow
-        i=0
+        i=-1
         for x in html:
             i=i+1
             #self.errors.append(x)
@@ -79,7 +79,7 @@ class MarkdownExtractor(BaseExtractor):
                     piece=piece.split()[0] # pre class="prettyprint lang-py"  这种提取出pre
                 except:
                     # piece = '' # 即, <> 内无字符的情况, 不进行后续的标记判断
-                    self.errors.append(''.join([ x,i,'piece',repr(piece)]))
+                    self.errors.append(', '.join([ x,str(i),'piece',repr(piece)]))
                     continue
                 # 遇到> 表示piece 完全的结束了, 这个时候才是比较piece的最佳位置而不是在后面
                 if piece.lower().startswith('script'):
