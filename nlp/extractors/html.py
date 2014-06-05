@@ -12,6 +12,8 @@ class LinkExtractor(BaseRegexExtractor):
         return r
 
 class MarkdownExtractor(BaseExtractor):
+    errors=[]
+
     def extract(self, html, baseurl=None):
 
         def cut_tail_whitespaces(txt):
@@ -53,11 +55,11 @@ class MarkdownExtractor(BaseExtractor):
         pre_flag = False
 
 
-        log=[]
-
         # 一个一个字符开始探测, 可以称之为流式探测, string flow
+        i=0
         for x in html:
-            log.append(x)
+            i=i+1
+            #self.errors.append(x)
 
             if x == '<':
 
@@ -67,13 +69,18 @@ class MarkdownExtractor(BaseExtractor):
                 text_flag  = False  # 下一个x不是数据
 
                 piece=''  # piece 不记录<>这两个符号,因为遇到<, 表示开始了一个新的piece, 这个时候piece重新开始记录<...>之间的符号
-                #log.append("标记开始了----".decode('cp936'))
+                #self.errors.append("标记开始了----".decode('cp936'))
                 #print x,text_flag,repr(x)
                 continue # (1)进入了标记, 开始下一个字符
             elif x == '>':
                 text_flag  = True   # 下一个x可能是数据
                 #print piece
-                piece=piece.split()[0] # pre class="prettyprint lang-py"  这种提取出pre
+                try:
+                    piece=piece.split()[0] # pre class="prettyprint lang-py"  这种提取出pre
+                except:
+                    # piece = '' # 即, <> 内无字符的情况, 不进行后续的标记判断
+                    self.errors.append(''.join([ x,i,'piece',repr(piece)]))
+                    continue
                 # 遇到> 表示piece 完全的结束了, 这个时候才是比较piece的最佳位置而不是在后面
                 if piece.lower().startswith('script'):
                     get_into_script_tag   = True   # 已经找到一个script标记
@@ -127,7 +134,7 @@ class MarkdownExtractor(BaseExtractor):
                     data.append('\n    ')
                     pre_flag = False
 
-                elif piece.lower().startswith('a '):
+                elif piece.lower()== 'a':
                     hrefs = hp.findall(piece)
                     if len(hrefs)==1:
                         if baseurl!=None:
@@ -201,7 +208,7 @@ class MarkdownExtractor(BaseExtractor):
 
 
                 #print 'piece:','-'*10,piece
-                #log.append("----标记结束了\n".decode('cp936'))
+                #self.errors.append("----标记结束了\n".decode('cp936'))
                 #print x,text_flag,repr(x)
                 continue
             else:  #(2)进入了标记内部 或者数据内部
