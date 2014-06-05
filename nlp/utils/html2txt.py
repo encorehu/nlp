@@ -151,7 +151,7 @@ def html2txt(lll):
             text_flag  = False  # 下一个x不是数据
 
             piece=''  # piece 不记录<>这两个符号,因为遇到<, 表示开始了一个新的piece, 这个时候piece重新开始记录<...>之间的符号
-            #log.append("标记开始了----".decode('cp936'))
+            #log.append("标记开始了----".decode('utf-8'))
             #print x,text_flag,repr(x)
             continue # (1)进入了标记, 开始下一个字符
         elif x == '>':
@@ -208,7 +208,7 @@ def html2txt(lll):
 
 
             #print 'piece:','-'*10,piece
-            #log.append("----标记结束了\n".decode('cp936'))
+            #log.append("----标记结束了\n".decode('utf-8'))
             #print x,text_flag,repr(x)
             continue
         else:  #(2)进入了标记内部 或者数据内部
@@ -326,7 +326,7 @@ def html2markdown(html, baseurl=None):
             text_flag  = False  # 下一个x不是数据
 
             piece=''  # piece 不记录<>这两个符号,因为遇到<, 表示开始了一个新的piece, 这个时候piece重新开始记录<...>之间的符号
-            #errors.append("标记开始了----".decode('cp936'))
+            #errors.append("标记开始了----".decode('utf-8'))
             #print x,text_flag,repr(x)
             continue # (1)进入了标记, 开始下一个字符
         elif x == '>':
@@ -391,7 +391,7 @@ def html2markdown(html, baseurl=None):
                 data.append('\n    ')
                 pre_flag = False
 
-            elif piece.lower().startswith('a '):
+            elif piece.lower()== 'a':
                 hrefs = hp.findall(piece)
                 if len(hrefs)==1:
                     if baseurl!=None:
@@ -465,7 +465,7 @@ def html2markdown(html, baseurl=None):
 
 
             #print 'piece:','-'*10,piece
-            #errors.append("----标记结束了\n".decode('cp936'))
+            #errors.append("----标记结束了\n".decode('utf-8'))
             #print x,text_flag,repr(x)
             continue
         else:  #(2)进入了标记内部 或者数据内部
@@ -516,10 +516,9 @@ def html2markdown(html, baseurl=None):
           .replace('&hellip;',u'…') \
           .replace('&mdash;',u'—') \
           .replace('\r','\n') \
+          .replace('\n\n\n','\n\n') \
           .replace('\n\n\n','\n\n')
 
     l2=len(aaa)
-    #print repr(aaa)
-    #print aaa
-    #print "原网页长度 %d ,清理后 %d, 压缩比%0.2f%%" % (l1,l2, 100.00 * l2/l1)
+    errors.append( "原网页长度 %d ,清理后 %d, 压缩比%0.2f%%" % (l1,l2, 100.00 * l2/l1))
     return cut_tail_whitespaces(aaa)
