@@ -2,9 +2,14 @@ import re
 
 class BaseExtractor(object):
 
-    def _extract(self, html):
-        result =[]
-        return result
+    def build_valid_filename(self, text):
+        dst=text
+        for x in '\t\n\':;",.[](){}~!@#$%^&*_+-=/<>?':
+            dst=dst.replace(x,' ')
+        dst=dst.replace(' ','-').replace('--','-').replace('--','-')
+        dst=dst.strip('-')
+        return dst
+
 
     def find_between(self, text, s1, s2=None):
         if not s1:
@@ -20,6 +25,10 @@ class BaseExtractor(object):
             return text[pos1+len(s1):pos2]
         else:
             return ''
+
+    def _extract(self, html):
+        result =[]
+        return result
 
     def extract(self, html):
         return self._extract(html)
