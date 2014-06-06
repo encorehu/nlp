@@ -3,7 +3,7 @@
 import re
 
 from base import BaseExtractor, BaseRegexExtractor
-from nlp.utils.html import html2markdown
+from nlp.utils.html2txt import html2markdown
 
 class LinkExtractor(BaseRegexExtractor):
     regex = '<\s*[Aa]{1}\s+[^>]*?[Hh][Rr][Ee][Ff]\s*=\s*[\"\']?([/:_;=\w\&\?\%\+\-\.\(\)]+)[\"\']?\s*.*?>(.*?)</[Aa]{1}>'
@@ -16,4 +16,4 @@ class MarkdownExtractor(BaseExtractor):
     errors=[]
 
     def extract(self, html, baseurl=None):
-        return html2markdown(html, baseurl=None)
+        return html2markdown(html, baseurl=baseurl)
